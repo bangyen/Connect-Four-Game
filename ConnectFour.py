@@ -38,30 +38,26 @@ def get_next_open_row(board, columnChoice):
 def winning_move(board, piece):
     # check horizontal
     for row in range(ROW_COUNT):
-        for column in range(COLUMN_COUNT-3):
-            if board[row][column] == piece and board[row][column + 1] == piece and board[row][column + 2] == piece and \
-                    board[row][column + 3] == piece:
+        for column in range(COLUMN_COUNT - 3):
+            if all(board[row][column + k] == piece for k in range(4)):
                 return True
 
     # check vertical
-    for row in range(ROW_COUNT-3):
+    for row in range(ROW_COUNT - 3):
         for column in range(COLUMN_COUNT):
-            if board[row][column] == piece and board[row + 1][column] == piece and board[row + 2][column] == piece and \
-                    board[row + 3][column] == piece:
+            if all(board[row + k][column] == piece for k in range(4)):
                 return True
 
     # check positive sloped diagonals
     for column in range(COLUMN_COUNT - 3):
         for row in range(ROW_COUNT - 3):
-            if board[row][column] == piece and board[row + 1][column + 1] == piece and board[row + 2][
-                column + 2] == piece and board[row + 3][column + 3] == piece:
+            if all(board[row + k][column + k] == piece for k in range(4)):
                 return True
 
     # check negative sloped diagonals
     for column in range(COLUMN_COUNT - 3):
         for row in range(3, ROW_COUNT):
-            if board[row][column] == piece and board[row - 1][column + 1] == piece and board[row - 2][
-                column + 2] == piece and board[row - 3][column + 3] == piece:
+            if all(board[row - k][column + k] == piece for k in range(4)):
                 return True
 
 
@@ -70,17 +66,13 @@ def draw_board(board):
         for column in range(COLUMN_COUNT):
             pygame.draw.rect(screen, GREEN,
                              (column * squaresize, (row * squaresize) + squaresize, squaresize, squaresize))
+            x, y = (column * squaresize + squaresize // 2), (row * squaresize + squaresize + squaresize // 2)
             if board[row][column] == 0:
-                pygame.draw.circle(screen, BLACK, (
-                    int(column * squaresize + squaresize / 2), int(row * squaresize + squaresize + squaresize / 2)), radius)
+                pygame.draw.circle(screen, BLACK, (x, y), radius)
             elif board[row][column] == 1:
-                pygame.draw.circle(screen, YELLOW, (
-                    int(column * squaresize + squaresize / 2), int(row * squaresize + squaresize + squaresize / 2)),
-                                   radius)
+                pygame.draw.circle(screen, YELLOW, (x, y), radius)
             else:
-                pygame.draw.circle(screen, ORANGE, (
-                    int(column * squaresize + squaresize / 2), int(row * squaresize + squaresize + squaresize / 2)),
-                                   radius)
+                pygame.draw.circle(screen, ORANGE, (x, y), radius)
     pygame.display.update()
 
 
